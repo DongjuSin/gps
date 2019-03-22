@@ -76,15 +76,6 @@ class DynamicsLRPrior(Dynamics):
     def plot(self, X, X_infer):
         import matplotlib.pyplot as plt
         _, T, _ = X.shape
-        '''
-        XU = np.concatenate((X, U), axis=2)
-        print('XU.shape: ', XU.shape)
-        XU_init = XU[0,0,:]
-        print('XU_init.shape: ', XU_init.shape)
-        print('Fm.shape: ', self.Fm.shape)
-        X_hat = np.matmul(self.Fm, XU_init) + self.fv
-        print(X_hat.shape)
-        '''
         
         for i in range(7):
             plt.figure()
