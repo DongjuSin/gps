@@ -108,7 +108,7 @@ class DynamicsLRPrior(Dynamics):
             X_infer[i+1] = X_next
         print(X_next.shape) # (90,1)
 
-        self.plot(X, X_infer)
+        self.plot(X[0], X_infer)
         
     def next_state2(self, X, U):
         N, T, _ = X.shape
