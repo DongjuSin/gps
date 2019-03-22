@@ -69,12 +69,14 @@ class DynamicsLRPrior(Dynamics):
             # X_hat = np.matmul(self.Fm[0,:,:], XU_init) + self.fv[0,:]
             XU_cur = XU[0,i,:]
             X_next = np.matmul(self.Fm[i,:,:], XU_cur) + self.fv[i,:]
+            X_infer[i] = X_next
         print(X_next.shape) # (90,1)
         
     # plot and compare next states computed from acquired dynamics and whole states in sample
-    def plot(self, X, U):
+    def plot(self, X, X_infer):
         import matplotlib.pyplot as plt
         _, T, _ = X.shape
+        '''
         XU = np.concatenate((X, U), axis=2)
         print('XU.shape: ', XU.shape)
         XU_init = XU[0,0,:]
@@ -82,11 +84,12 @@ class DynamicsLRPrior(Dynamics):
         print('Fm.shape: ', self.Fm.shape)
         X_hat = np.matmul(self.Fm, XU_init) + self.fv
         print(X_hat.shape)
+        '''
         
         for i in range(7):
             plt.figure()
-            plt.plot(range(T), X_hat[:, i], ro, label='dynamcis')
-            plt.plot(range(T), X[:, i], ro, label='sample')
+            plt.plot(range(T), X_infer[:, i], 'ro', label='dynamcis')
+            plt.plot(range(T), X[:, i], 'bo', label='sample')
             plt.xlabel("step")
             plt.ylabel("state")
             plt.title("state-step plot")
