@@ -78,7 +78,7 @@ class DynamicsLRPrior(Dynamics):
     # plot and compare next states computed from acquired dynamics and whole states in sample
     def plot(self, X, X_infer):
         import matplotlib.pyplot as plt
-        _, T, _ = X.shape
+        T, _ = X.shape
         
         for i in range(7):
             plt.figure()
@@ -87,10 +87,10 @@ class DynamicsLRPrior(Dynamics):
             plt.xlabel("step")
             plt.ylabel("state")
             plt.title("state-step plot")
-            plt.legend()
-            plt.show()
+            plt.legend(loc='upper left', bbox_to_anchor=(1.0, 1.0))
+            # plt.show()
             
-            plt.savefig('joint_%d.png' %i)
+            plt.savefig('/hdd/gps-master/plot_coeff/joint_%d.png' %i)
             
     def next_state(self, X, U):
         _, T, _ = X.shape
@@ -108,7 +108,7 @@ class DynamicsLRPrior(Dynamics):
             X_infer[i+1] = X_next
         print(X_next.shape) # (90,1)
 
-        self.plot(X[0], X_infer)
+        self.plot(X[0,:,:], X_infer)
         
     def next_state2(self, X, U):
         N, T, _ = X.shape
