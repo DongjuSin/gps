@@ -102,7 +102,8 @@ class DynamicsLRPrior(Dynamics):
         print('Fm.shape: ', self.Fm.shape) # (20,90,97)
         X_infer = np.zeros((20,90))
         X_infer[0] = XU_init[:90]
-        for i in range(T-1):
+        # for i in range(T-1):
+        for i in range(T-2):
             XU_cur = np.concatenate((X_infer[i, :], XU[0,i,90:]), axis=0)
             X_next = np.matmul(self.Fm[i+1,:,:], XU_cur) + self.fv[i+1,:]
             X_infer[i+1] = X_next
