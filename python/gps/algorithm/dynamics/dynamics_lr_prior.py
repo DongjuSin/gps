@@ -73,7 +73,7 @@ class DynamicsLRPrior(Dynamics):
             X_infer[i] = X_next
         print(X_next.shape) # (90,1)
 
-        plot(X, X_infer)
+        self.plot(X, X_infer)
         
     # plot and compare next states computed from acquired dynamics and whole states in sample
     def plot(self, X, X_infer):
@@ -89,3 +89,38 @@ class DynamicsLRPrior(Dynamics):
             plt.title("state-step plot")
             plt.legend()
             plt.show()
+            
+            plt.savefig('joint_%d.png' %i)
+            
+    def next_state(self, X, U):
+        _, T, _ = X.shape
+        XU = np.concatenate((X, U), axis=2)
+        print('XU.shape: ', XU.shape) # (10,20,97)
+        
+        XU_init = XU[0,0,:]
+        # print('XU_init.shape: ', XU_init.shape) # (97,)
+        print('Fm.shape: ', self.Fm.shape) # (20,90,97)
+        X_infer = np.zeros((20,90))
+        X_infer[0] = XU_init[:90]
+        for i in range(T-1):
+            XU_cur = np.concatenate((X_infer[i, :], XU[0,i,90:]), axis=0)
+            X_next = np.matmul(self.Fm[i+1,:,:], XU_cur) + self.fv[i+1,:]
+            X_infer[i+1] = X_next
+        print(X_next.shape) # (90,1)
+
+        self.plot(X, X_infer)
+        
+    def next_state2(self, X, U):
+        N, T, _ = X.shape
+        XU = np.concatenate((X, U), axis=2) # (10,20,97)
+        
+        for i in range(N):
+            XU_init = XU[i,0,:]
+            X_infer = np.zeros((10,20,90))
+            X_infer[i,0,:] = XU_init[:90]
+            for j in range(T-1):
+                XU_cur = np.concatenate((X_infer[i,j, :], XU[i,j,90:]), axis=0)
+                X_next = np.matmul(self.Fm[j+1,:,:], XU_cur) + self.fv[j+1,:]
+                X_infer[j+1] = X_next
+        
+        self.plot(X, X_infer)
